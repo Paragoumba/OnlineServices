@@ -1,0 +1,3 @@
+command: sendmail
+package: fr.paragoumba.onlineservices.command.SendMail
+description: Sends mails.

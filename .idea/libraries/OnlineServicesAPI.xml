@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="OnlineServicesAPI">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../../API/OnlineServicesAPI.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

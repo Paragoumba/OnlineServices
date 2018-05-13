@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="OnlineServicesServer:jar">
+    <output-path>D:/Desktop/Dev</output-path>
+    <root id="archive" name="Server.jar">
+      <element id="module-output" name="OnlineServicesServer" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../API/Mail/javax.mail.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../API/Data/snakeyaml-1.18.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

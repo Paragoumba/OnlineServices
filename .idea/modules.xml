@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/Commands/Commands.iml" filepath="$PROJECT_DIR$/Commands/Commands.iml" />
+      <module fileurl="file://$PROJECT_DIR$/OnlineServicesAPI/OnlineServicesAPI.iml" filepath="$PROJECT_DIR$/OnlineServicesAPI/OnlineServicesAPI.iml" />
+      <module fileurl="file://$PROJECT_DIR$/OnlineServicesClient/OnlineServicesClient.iml" filepath="$PROJECT_DIR$/OnlineServicesClient/OnlineServicesClient.iml" />
+      <module fileurl="file://$PROJECT_DIR$/OnlineServicesServer/OnlineServicesServer.iml" filepath="$PROJECT_DIR$/OnlineServicesServer/OnlineServicesServer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Commands/SendMailCommand/SendMailCommand.iml" filepath="$PROJECT_DIR$/Commands/SendMailCommand/SendMailCommand.iml" />
+    </modules>
+  </component>
+</project>
