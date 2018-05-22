@@ -1,5 +1,7 @@
 package fr.paragoumba.onlineservices.server;
 
+import fr.paragoumba.onlineservices.api.Response;
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -16,12 +18,26 @@ public class Server {
 
         CommandInterpreter.init();
 
-        int PORT = Integer.parseInt(args[0]);
+        int port = 1519;
 
-        try(ServerSocket serverSocket = new ServerSocket(PORT);
+        try {
+
+            port = Integer.parseInt(args[0]);
+
+        } catch (NumberFormatException ignored){
+
+            System.out.println("Error while parsing port, default port 1519 will be used.");
+
+        }
+
+        System.out.println("Listening on localhost:" + port);
+
+        try(ServerSocket serverSocket = new ServerSocket(port);
             Socket socket = serverSocket.accept();
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))){
+
+            System.out.println("Client " + socket.getLocalAddress() + ":" + socket.getLocalPort() + " connected !");
 
             String command;
 
@@ -31,9 +47,9 @@ public class Server {
 
                 System.out.println("C:" + command);
 
-                int response = CommandInterpreter.interpret(command);
+                Response response = CommandInterpreter.interpret(command);
 
-                System.out.println("R:" + response);
+                System.out.println("S:" + response.getStatus() + "\nR:" + response.getResponse());
                 out.println(response);
 
             }

@@ -1,11 +1,9 @@
 <component name="ArtifactManager">
   <artifact type="jar" build-on-make="true" name="OnlineServicesClient:jar">
-    <output-path>D:/Desktop/Dev</output-path>
+    <output-path>$PROJECT_DIR$/../../../../../Dev/OnlineServices</output-path>
     <root id="archive" name="OnlineServicesClient.jar">
-      <element id="directory" name="META-INF">
-        <element id="file-copy" path="$PROJECT_DIR$/Commands/SendMailCommand/src/META-INF/MANIFEST.MF" />
-      </element>
       <element id="module-output" name="OnlineServicesClient" />
+      <element id="module-output" name="OnlineServicesAPI" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../../../API/OnlineServicesAPI.jar" path-in-jar="/" />
     </root>
   </artifact>

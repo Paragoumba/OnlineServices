@@ -1,7 +1,22 @@
 package fr.paragoumba.onlineservices.api;
 
-public interface Command {
+public abstract class Command {
 
-    int execute(String[] args);
+    public Command(){}
 
+    public Command(String description){
+
+        this.description = description;
+
+    }
+
+    private String description;
+
+    public abstract Response execute(String[] strings);
+
+    public String getDescription() {
+
+        return description;
+
+    }
 }
