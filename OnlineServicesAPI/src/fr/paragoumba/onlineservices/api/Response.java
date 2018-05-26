@@ -2,21 +2,27 @@ package fr.paragoumba.onlineservices.api;
 
 public class Response {
 
+    /**
+     * Represents a Response provided by an executed Command.
+     */
+
     public Response(){}
 
+    /**
+     * A Response without message
+     * @param status returned code (Status)
+     */
     public Response(int status){
 
         this.status = status;
 
     }
 
-    public Response(String response){
-
-        this.status = Status.UNDEFINED;
-        this.response = response;
-
-    }
-
+    /**
+     * A Response with message
+     * @param status returned code (Status)
+     * @param response returned message
+     */
     public Response(int status, String response){
 
         this.status = status;
@@ -54,7 +60,7 @@ public class Response {
     @Override
     public String toString() {
 
-        return "{status=" + status + (response != null ? ", reponse=" + response : "") + "}";
+        return "{status=" + status + (response != null ? ", response=" + response : "") + "}";
 
     }
 }

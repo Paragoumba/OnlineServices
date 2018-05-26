@@ -1,0 +1,4 @@
+name: SendMail
+author: Paragoumba
+version: 0.1
+package: fr.paragoumba.onlineservices.sendmail.SendMail

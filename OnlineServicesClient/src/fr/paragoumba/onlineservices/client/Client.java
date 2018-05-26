@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -15,21 +14,10 @@ public class Client {
 
     public static void main(String[] args) {
 
-        if (args.length < 1){
+        String hostname = "localhost";
 
-            System.out.println("Parameters \"hostname\" and \"port\" missing.");
-            return;
-
-        }
-
-        String hostname = args[0];
-
-        if (args.length < 2){
-
-            System.out.println("Parameter \"port\" missing.");
-            return;
-
-        }
+        if (args.length > 0) hostname = args[0];
+        else System.out.println("Missing hostname, defaulting to \"localhost\"");
 
         int port = 1519;
 
@@ -37,7 +25,7 @@ public class Client {
 
             port = Integer.parseInt(args[1]);
 
-        } catch (NumberFormatException ignored){
+        } catch (Exception e){
 
             System.out.println("Error while parsing port, default port 1519 will be used.");
 
@@ -57,11 +45,18 @@ public class Client {
             long start = 0;
 
             System.out.println("C:" + command);
+
+            if (command.toLowerCase().equals("exit")) return;
+
             out.println(command);
+
+            if (command.toLowerCase().equals("shutdown")) return;
 
             while ((fromServer = in.readLine()) != null){
 
                 response = parseResponse(fromServer);
+
+                if (response.containsKey("response")) response.put("response", response.get("response").replaceAll("\\\\n", "\n"));
 
                 try {
 
@@ -73,9 +68,9 @@ public class Client {
 
                 }
 
-                System.out.println("R:" + fromServer);
+                System.out.println("S:" + response.get("status") + (response.get("response") != null ? "\n" + response.get("response") : ""));
 
-                if (start != 0 && command.equalsIgnoreCase("ping") && status == Status.OK) System.out.println("Pong ! " + ((double) (System.currentTimeMillis() - start) / 1E3) + "s");
+                if (start != 0 && command.equalsIgnoreCase("ping") && status == Status.OK) System.out.println("Pong ! " + (/*(double) */(System.currentTimeMillis() - start)/* / 1E3*/) + "ms");
                 else if (command.toLowerCase().startsWith("shutdown") && fromServer.equalsIgnoreCase("0") || status == Status.RESPONSE_CORRUPTED){
 
                     break;
@@ -94,7 +89,7 @@ public class Client {
 
         } catch (IOException e){
 
-            System.out.println("Server isn't connected, try again later. ");
+            System.out.println("Server isn't connected, try again later.");
 
         }
     }

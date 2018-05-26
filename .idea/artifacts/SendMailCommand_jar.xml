@@ -1,10 +1,10 @@
 <component name="ArtifactManager">
   <artifact type="jar" build-on-make="true" name="SendMailCommand:jar">
-    <output-path>$PROJECT_DIR$/../../../../../Dev/OnlineServices/commands</output-path>
+    <output-path>$USER_HOME$/Desktop/Dev/OnlineServices/plugins</output-path>
     <root id="archive" name="SendMailCommand.jar">
-      <element id="module-output" name="SendMailCommand" />
       <element id="module-output" name="OnlineServicesAPI" />
       <element id="extracted-dir" path="$PROJECT_DIR$/../../../API/Mail/javax.mail.jar" path-in-jar="/" />
+      <element id="module-output" name="SendMailPlugin" />
     </root>
   </artifact>
 </component>

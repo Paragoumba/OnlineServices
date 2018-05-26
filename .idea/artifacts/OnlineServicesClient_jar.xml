@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="jar" build-on-make="true" name="OnlineServicesClient:jar">
-    <output-path>$PROJECT_DIR$/../../../../../Dev/OnlineServices</output-path>
+    <output-path>$USER_HOME$/Desktop/Dev/OnlineServices</output-path>
     <root id="archive" name="OnlineServicesClient.jar">
       <element id="module-output" name="OnlineServicesClient" />
       <element id="module-output" name="OnlineServicesAPI" />

@@ -1,7 +1,7 @@
 package fr.paragoumba.onlineservices.server;
 
-import fr.paragoumba.onlineservices.api.Command;
 import fr.paragoumba.onlineservices.api.Plugin;
+import fr.paragoumba.onlineservices.api.Command;
 import fr.paragoumba.onlineservices.api.Response;
 import fr.paragoumba.onlineservices.api.Status;
 import org.yaml.snakeyaml.Yaml;
@@ -14,6 +14,7 @@ import java.net.URLClassLoader;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.AbstractMap.SimpleEntry;
+import java.util.function.BiConsumer;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -21,134 +22,20 @@ public class CommandInterpreter {
 
     private CommandInterpreter(){}
 
-    private static ArrayList<Plugin> plugins = new ArrayList<>();
-    private static HashMap<String, Command> commands = new HashMap<>();
+    static ArrayList<Plugin> plugins = new ArrayList<>();
+    static SortedMap<String, Command> commands = new TreeMap<>();
 
     static void init(){
 
         loadPlugins();
-        plugins.add(new Plugin("OnlineServices", "1.0", "Paragoumba") {
-
-            @Override
-            public void onEnable() {
-
-                commands.put("test", new Command("Test command.") {
-
-                    @Override
-                    public Response execute(String[] args) {
-
-                        return new Response(Status.OK, "test");
-
-                    }
-                });
-                commands.put("ping", new Command("Returns \"Pong !\" and response time.") {
-
-                    @Override
-                    public Response execute(String[] args) {
-
-                        return new Response(Status.OK);
-
-                    }
-                });
-                commands.put("reload", new Command("Reloads all the plugins.") {
-
-                    @Override
-                    public Response execute(String[] args) {
-
-                        unloadPlugins();
-
-                        String response = "Plugins reloaded.";
-
-                        loadPlugins();
-                        System.out.println(response);
-
-                        return new Response(Status.OK, response);
-
-                    }
-                });
-                commands.put("unload", new Command("Unloads all the plugins.") {
-
-                    @Override
-                    public Response execute(String[] args) {
-
-                        String response = "Plugins unloaded.";
-
-                        disablePlugins();
-                        System.out.println(response);
-
-                        return new Response(Status.OK, response);
-
-                    }
-                });
-                commands.put("pllist", new Command("Lists all installed plugins.") {
-
-                    @Override
-                    public Response execute(String[] strings) {
-
-                        StringBuilder pluginList = new StringBuilder();
-
-                        for (Plugin plugin : plugins) pluginList.append(plugin.getName()).append(" (v").append(plugin.getVersion()).append(") :\n    ").append("Author: ").append(plugin.getAuthor()).append("\n");
-
-                        return new Response(Status.OK, pluginList.toString());
-
-                    }
-                });
-                commands.put("cmdlist", new Command("Lists all the plugins and their available commands.") {
-
-                    @Override
-                    public Response execute(String[] args) {
-
-                        StringBuilder listBuilder = new StringBuilder();
-
-                        for (Entry<String, Command> cmd : commands.entrySet()) listBuilder.append(cmd.getKey()).append("\n");
-
-                        listBuilder.append(commands.keySet().size()).append(" commands.");
-
-                        return new Response(Status.OK, listBuilder.toString());
-
-                    }
-                });
-                commands.put("help", new Command("Displays the description of the available commands.") {
-
-                    @Override
-                    public Response execute(String[] args) {
-
-                        StringBuilder helpBuilder = new StringBuilder();
-
-                        helpBuilder.append("Help :\n");
-
-                        for (Entry<String, Command> entry : commands.entrySet()) helpBuilder.append(entry.getKey()).append("\n").append("  ").append(entry.getValue().getDescription()).append("\n");
-
-                        helpBuilder.append(plugins.size()).append(" commands.");
-
-                        return new Response(Status.OK, helpBuilder.toString());
-
-                    }
-                });
-                commands.put("shutdown", new Command("Shutdowns the server.") {
-
-                    @Override
-                    public Response execute(String[] args) {
-
-                        String response = "Shutting down.";
-
-                        System.out.println(response);
-                        Server.hasToShutdown = true;
-
-                        return new Response(Status.OK, response);
-
-                    }
-                });
-            }
-        });
-
+        plugins.add(new OnlineServicesCommands("OnlineServices", "1.0", "Paragoumba"));
         enablePlugins();
 
     }
 
-    public static void registerCommand(String commandString, Command command){
+    public static void registerCommand(Command command){
 
-        commands.put(commandString, command);
+        commands.put(command.getCommand(), command);
 
     }
 
@@ -169,17 +56,15 @@ public class CommandInterpreter {
 
             System.out.println(cmd + ", " + Arrays.toString(cmdArgs));
 
-            System.out.println(commands);
-
             if (command != null) return command.execute(cmdArgs);
 
         }
 
-        return new Response(Status.NOT_FOUND);
+        return new Response(Status.NOT_FOUND, "Unknown command.");
 
     }
 
-    private static void loadPlugins(){
+    static void loadPlugins(){
 
         try {
 
@@ -189,9 +74,13 @@ public class CommandInterpreter {
             if (!pluginsDir.exists()){
 
                 pluginsDir.mkdirs();
-                System.out.println("Commands' directory created.");
+                System.out.println("Plugins' directory created.");
 
-            } else System.out.println("Commands' directory found.");
+            } else {
+
+                System.out.println("Plugins' directory found.");
+
+            }
 
             File[] files = pluginsDir.listFiles();
             Yaml yaml = new Yaml();
@@ -217,7 +106,7 @@ public class CommandInterpreter {
 
                                 plugins.add(plugin);
 
-                            } catch (InvocationTargetException | NoSuchMethodException e) {
+                            } catch (IllegalAccessException | ClassNotFoundException | InstantiationException | InvocationTargetException | NoSuchMethodException e) {
 
                                 System.out.println("Error in loading main class. Verify that it extends Plugin.");
 
@@ -231,17 +120,22 @@ public class CommandInterpreter {
                 }
             }
 
-        } catch (IllegalAccessException | InstantiationException | ClassNotFoundException | IOException e){
+        } catch (IOException e){
 
             e.printStackTrace();
 
         }
     }
 
-    private static void unloadPlugins(){
+    static void unloadPlugins(){
 
         disablePlugins();
-        plugins.clear();
+
+        for (int i = 0; i < plugins.size(); ++i) if (!(plugins.get(i) instanceof OnlineServicesCommands)) plugins.remove(i);
+
+        commands.clear();
+
+        for (Plugin plugin : plugins) plugin.onEnable();
 
     }
 

@@ -1,8 +1,6 @@
 package fr.paragoumba.onlineservices.server;
 
-import fr.paragoumba.onlineservices.api.Response;
-
-import java.io.*;
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -24,7 +22,7 @@ public class Server {
 
             port = Integer.parseInt(args[0]);
 
-        } catch (NumberFormatException ignored){
+        } catch (Exception e){
 
             System.out.println("Error while parsing port, default port 1519 will be used.");
 
@@ -32,32 +30,36 @@ public class Server {
 
         System.out.println("Listening on localhost:" + port);
 
-        try(ServerSocket serverSocket = new ServerSocket(port);
-            Socket socket = serverSocket.accept();
-            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))){
+        Socket socket = null;
 
-            System.out.println("Client " + socket.getLocalAddress() + ":" + socket.getLocalPort() + " connected !");
+        try(ServerSocket serverSocket = new ServerSocket(port)){
 
-            String command;
+            do {
 
-            while ((command = in.readLine()) != null){
+                socket = serverSocket.accept();
+                ConnectionManagement connectionManagement = new ConnectionManagement(socket);
 
-                if (hasToShutdown) break;
+                connectionManagement.start();
 
-                System.out.println("C:" + command);
-
-                Response response = CommandInterpreter.interpret(command);
-
-                System.out.println("S:" + response.getStatus() + "\nR:" + response.getResponse());
-                out.println(response);
-
-            }
+            } while (socket != null && !hasToShutdown);
 
         } catch (IOException e) {
 
             e.printStackTrace();
 
+        }
+
+        if (socket != null) {
+
+            try {
+
+                socket.close();
+
+            } catch (IOException e) {
+
+                e.printStackTrace();
+
+            }
         }
     }
 }

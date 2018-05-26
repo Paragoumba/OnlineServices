@@ -5,7 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/OnlineServicesAPI/OnlineServicesAPI.iml" filepath="$PROJECT_DIR$/OnlineServicesAPI/OnlineServicesAPI.iml" />
       <module fileurl="file://$PROJECT_DIR$/OnlineServicesClient/OnlineServicesClient.iml" filepath="$PROJECT_DIR$/OnlineServicesClient/OnlineServicesClient.iml" />
       <module fileurl="file://$PROJECT_DIR$/OnlineServicesServer/OnlineServicesServer.iml" filepath="$PROJECT_DIR$/OnlineServicesServer/OnlineServicesServer.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Commands/SendMailCommand/SendMailCommand.iml" filepath="$PROJECT_DIR$/Commands/SendMailCommand/SendMailCommand.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SendMailPlugin/SendmailPlugin.iml" filepath="$PROJECT_DIR$/SendMailPlugin/SendmailPlugin.iml" />
     </modules>
   </component>
 </project>
